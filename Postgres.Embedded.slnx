@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/examples/">
+    <Project Path="examples/Postgres.Embedded.Examples/Postgres.Embedded.Examples.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Postgres.Embedded/Postgres.Embedded.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Postgres.Embedded.Tests/Postgres.Embedded.Tests.csproj" />
+  </Folder>
+</Solution>

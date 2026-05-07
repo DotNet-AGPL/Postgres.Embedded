@@ -1,0 +1,101 @@
+Copyright Notice and License Information
+
+Postgres.Embedded - Embedded PostgreSQL for .NET 10.0
+Copyright (C) 2026 Postgres.Embedded Contributors
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+================================================================================
+
+For the full license text, please see the LICENSE file in the root directory
+of this project.
+
+AGPL-3.0 Key Requirements:
+--------------------------
+1. Source Code Availability: If you modify and use this software over a 
+   network (including SaaS), you must provide the source code to users.
+
+2. Copyleft: Any derivative works must be licensed under AGPL-3.0 as well.
+
+3. Modifications Notice: If you modify this software, you must clearly 
+   indicate the changes and the date of modification.
+
+4. Network Interaction: Users interacting with modified versions through 
+   a network must be offered the source code.
+
+5. No Additional Restrictions: You cannot impose additional restrictions 
+   beyond those in AGPL-3.0.
+
+How to Apply This License to Your Modifications:
+-----------------------------------------------
+If you modify files from this project, add the following header at the top:
+
+/*
+ * Postgres.Embedded - Modified version
+ * Copyright (C) [Year] [Your Name/Organization]
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * Original work: Copyright (C) 2026 Postgres.Embedded Contributors
+ */
+
+Contributors:
+-------------
+The following individuals/organizations have contributed to this project:
+
+- [Your Name] - Initial implementation and port from go-embedded-postgres
+
+For a complete list of contributors, please see the Git commit history.
+
+Contact Information:
+-------------------
+For questions about licensing or contributions, please contact:
+- GitHub Repository: https://github.com/DotNet-AGPL/Postgres.Embedded
+- GitHub Issues: https://github.com/DotNet-AGPL/Postgres.Embedded/issues
+- Email: [contact-email@example.com]
+
+Third-Party Dependencies:
+------------------------
+This project uses the following third-party libraries, each under their 
+respective licenses:
+
+1. Npgsql (PostgreSQL driver) - PostgreSQL License
+   https://www.npgsql.org/
+
+2. SharpCompress (Archive extraction) - MIT License
+   https://github.com/adamhathcock/sharpcompress
+
+3. Microsoft.Extensions.Logging - MIT License
+   https://github.com/dotnet/runtime
+
+4. xUnit (Testing framework) - Apache 2.0 License
+   https://xunit.net/
+
+5. FluentAssertions (Testing library) - Apache 2.0 License
+   https://fluentassertions.com/
+
+Note: While this project is under AGPL-3.0, the third-party dependencies 
+retain their original licenses. When distributing this software, you must 
+comply with all applicable licenses.

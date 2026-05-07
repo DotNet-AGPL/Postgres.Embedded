@@ -1,0 +1,165 @@
+trigger:
+  branches:
+    include:
+    - master
+    - main
+    - develop
+  paths:
+    exclude:
+    - docs/
+    - README.md
+    - LICENSE
+
+pr:
+  branches:
+    include:
+    - master
+    - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetVersion: '10.0.x'
+
+stages:
+- stage: Build
+  displayName: 'Build and Test'
+  jobs:
+  - job: Build
+    displayName: 'Build Project'
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET SDK'
+      inputs:
+        packageType: 'sdk'
+        version: $(dotnetVersion)
+        includePreviewVersions: true
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore NuGet packages'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Build solution'
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Run unit tests'
+      inputs:
+        command: 'test'
+        projects: 'tests/DotNet.EmbeddedPostgres.Tests/DotNet.EmbeddedPostgres.Tests.csproj'
+        arguments: '--configuration $(buildConfiguration) --no-build --filter "Category=Unit"'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Pack NuGet package'
+      inputs:
+        command: 'pack'
+        packagesToPack: 'src/DotNet.EmbeddedPostgres/DotNet.EmbeddedPostgres.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        versioningScheme: 'byPrId'
+    
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Postgres.Embedded NuGet package'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'nuget-package'
+        publishLocation: 'Container'
+
+- stage: IntegrationTests
+  displayName: 'Integration Tests'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: LinuxTests
+    displayName: 'Linux Integration Tests'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: $(dotnetVersion)
+        includePreviewVersions: true
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Run integration tests'
+      inputs:
+        command: 'test'
+        projects: 'tests/DotNet.EmbeddedPostgres.Tests/DotNet.EmbeddedPostgres.Tests.csproj'
+        arguments: '--configuration $(buildConfiguration) --filter "Category=Integration"'
+      timeoutInMinutes: 30
+    
+  - job: WindowsTests
+    displayName: 'Windows Integration Tests'
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: $(dotnetVersion)
+        includePreviewVersions: true
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Run integration tests'
+      inputs:
+        command: 'test'
+        projects: 'tests/DotNet.EmbeddedPostgres.Tests/DotNet.EmbeddedPostgres.Tests.csproj'
+        arguments: '--configuration $(buildConfiguration) --filter "Category=Integration"'
+      timeoutInMinutes: 30
+    
+  - job: MacOSTests
+    displayName: 'macOS Integration Tests'
+    pool:
+      vmImage: 'macos-latest'
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: $(dotnetVersion)
+        includePreviewVersions: true
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Run integration tests'
+      inputs:
+        command: 'test'
+        projects: 'tests/DotNet.EmbeddedPostgres.Tests/DotNet.EmbeddedPostgres.Tests.csproj'
+        arguments: '--configuration $(buildConfiguration) --filter "Category=Integration"'
+      timeoutInMinutes: 30
+
+- stage: Publish
+  displayName: 'Publish to NuGet'
+  dependsOn: IntegrationTests
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+  - job: Publish
+    displayName: 'Publish Package'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download NuGet package'
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'nuget-package'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    
+    - task: NuGetCommand@2
+      displayName: 'Push to NuGet.org'
+      inputs:
+        command: 'push'
+        packagesToPush: '$(System.ArtifactsDirectory)/nuget-package/*.nupkg'
+        nuGetFeedType: 'external'
+        publishFeedCredentials: 'NuGet.org'
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    
+    - script: |
+        echo "Package published to NuGet.org"
+        echo "Repository: https://github.com/DotNet-AGPL/Postgres.Embedded"
+        echo "License: AGPL-3.0"

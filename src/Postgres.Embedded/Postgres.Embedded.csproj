@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageId>Postgres.Embedded</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Postgres.Embedded Contributors</Authors>
+    <Description>Run a real PostgreSQL database locally as part of .NET applications or tests.</Description>
+    <PackageTags>postgresql;embedded;database;testing;integration-test</PackageTags>
+    <PackageProjectUrl>https://github.com/DotNet-AGPL/Postgres.Embedded</PackageProjectUrl>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/DotNet-AGPL/Postgres.Embedded.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="10.0.2" />
+    <PackageReference Include="SharpCompress" Version="0.48.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE-NOTICE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
