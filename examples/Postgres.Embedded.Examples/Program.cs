@@ -1,19 +1,25 @@
 using Dapper;
 using Npgsql;
-using Postgres.Embedded;
 using Postgres.Embedded.Models;
 
 namespace Postgres.Embedded.Examples;
 
-public class BasicUsageExample
+public class Program
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:删除未使用的参数", Justification = "<挂起>")]
     public static void Main(string[] args)
     {
         Console.WriteLine("=== Postgres.Embedded Basic Usage Example ===");
         
+        var baseDir = AppContext.BaseDirectory;
+        
         using var postgres = new EmbeddedPostgresBuilder()
             .WithVersion(PostgresVersion.V16)
             .WithPort(5432)
+            .WithCachePath(Path.Combine(baseDir, "pg-bin", "cache"))
+            .WithRuntimePath(Path.Combine(baseDir, "pg-bin", "runtime"))
+            .WithDataPath(Path.Combine(baseDir, "pg-bin", "data"))
+            .WithBinariesPath(Path.Combine(baseDir, "pg-bin", "binaries"))
             .WithDatabase("exampledb")
             .WithStartTimeout(TimeSpan.FromSeconds(30))
             .Build();
@@ -50,11 +56,11 @@ public class BasicUsageExample
         
         Console.WriteLine("\nExample completed successfully!");
     }
-}
 
-public class User
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string? Email { get; set; }
+    public class User
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Email { get; set; }
+    }
 }

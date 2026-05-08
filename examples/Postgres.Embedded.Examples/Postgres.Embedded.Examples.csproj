@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
+    <StartupObject>Postgres.Embedded.Examples.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

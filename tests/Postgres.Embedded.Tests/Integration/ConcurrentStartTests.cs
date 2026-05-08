@@ -11,12 +11,22 @@ public class ConcurrentStartTests
     [Fact]
     public void EmbeddedPostgres_ShouldThrowOnPortConflict()
     {
+        var baseDir = AppContext.BaseDirectory;
+        
         var postgres1 = new EmbeddedPostgresBuilder()
             .WithPort(5432)
+            .WithCachePath(Path.Combine(baseDir, "pg-test-5432", "cache"))
+            .WithRuntimePath(Path.Combine(baseDir, "pg-test-5432", "runtime"))
+            .WithDataPath(Path.Combine(baseDir, "pg-test-5432", "data"))
+            .WithBinariesPath(Path.Combine(baseDir, "pg-test-5432", "binaries"))
             .Build();
         
         var postgres2 = new EmbeddedPostgresBuilder()
             .WithPort(5432)
+            .WithCachePath(Path.Combine(baseDir, "pg-test-5432-conflict", "cache"))
+            .WithRuntimePath(Path.Combine(baseDir, "pg-test-5432-conflict", "runtime"))
+            .WithDataPath(Path.Combine(baseDir, "pg-test-5432-conflict", "data"))
+            .WithBinariesPath(Path.Combine(baseDir, "pg-test-5432-conflict", "binaries"))
             .Build();
         
         try
@@ -41,12 +51,22 @@ public class ConcurrentStartTests
     [Fact]
     public void EmbeddedPostgres_ShouldAllowDifferentPortsConcurrently()
     {
+        var baseDir = AppContext.BaseDirectory;
+        
         var postgres1 = new EmbeddedPostgresBuilder()
             .WithPort(5432)
+            .WithCachePath(Path.Combine(baseDir, "pg-test-5432", "cache"))
+            .WithRuntimePath(Path.Combine(baseDir, "pg-test-5432", "runtime"))
+            .WithDataPath(Path.Combine(baseDir, "pg-test-5432", "data"))
+            .WithBinariesPath(Path.Combine(baseDir, "pg-test-5432", "binaries"))
             .Build();
         
         var postgres2 = new EmbeddedPostgresBuilder()
             .WithPort(5433)
+            .WithCachePath(Path.Combine(baseDir, "pg-test-5433", "cache"))
+            .WithRuntimePath(Path.Combine(baseDir, "pg-test-5433", "runtime"))
+            .WithDataPath(Path.Combine(baseDir, "pg-test-5433", "data"))
+            .WithBinariesPath(Path.Combine(baseDir, "pg-test-5433", "binaries"))
             .Build();
         
         try
